@@ -1,0 +1,123 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:roman_paper_task_1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:roman_paper_task_1.Models"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="roman_paper_task_1.Views.MainWindow"
+        x:DataType="vm:LibraryBookViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="roman_paper_task_1">
+
+    <Window.Styles>
+        <Style Selector="TextBlock.header">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
+        </Style>
+        <Style Selector="StackPanel.section">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Spacing" Value="5"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="300,*">
+        <!-- Левая панель - список книг -->
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Classes="section">
+            <TextBlock Classes="header" Text="Список книг"/>
+            <ListBox ItemsSource="{Binding Books}"
+                     SelectedItem="{Binding SelectedBook}"
+                     Height="400" />
+
+            <TextBlock Classes="header" Text="Добавление новой книги"/>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Код учета:"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NewInventoryCode}"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Название:"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NewTitle}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Авторы (через запятую):"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NewAuthors}"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Количество страниц:"/>
+                <NumericUpDown Grid.Row="3" Grid.Column="1" Value="{Binding NewPageCount}" Minimum="1"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Тематический раздел:"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding NewCategory}"/>
+
+                <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                        Command="{Binding AddNewBookCommand}"
+                        Content="Добавить книгу"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Margin="0,10,0,0"/>
+            </Grid>
+        </StackPanel>
+
+        <!-- Правая панель - детали книги -->
+        <StackPanel Grid.Row="0" Grid.Column="1" Classes="section">
+            <TextBlock Classes="header" Text="Информация о книге"/>
+            <StackPanel IsVisible="{Binding SelectedBook, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="150,*">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Код учета:"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedBook.InventoryCode}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Название:"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedBook.Title}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Авторы:"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedBook.Authors, Converter={StaticResource AuthorsConverter}}"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Количество страниц:"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedBook.PageCount}"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Тематический раздел:"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedBook.Category}"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Текущее состояние:"/>
+                    <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding SelectedBook.State}"/>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Панель редактирования -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Classes="section">
+            <TextBlock Classes="header" Text="Управление книгой"/>
+            <StackPanel IsVisible="{Binding SelectedBook, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="150,*">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Изменить состояние:"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1"
+                              ItemsSource="{Binding BookStates}"
+                              SelectedItem="{Binding SelectedEnumItem, Mode=TwoWay}">
+    
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Description}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+
+                    </ComboBox>
+
+
+
+                    <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                            Command="{Binding ChangeBookStateCommand}"
+                            Content="Изменить состояние"
+                            HorizontalAlignment="Left"
+                            Margin="0,5,0,10"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Новый код учета:"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding NewInventoryCode}"/>
+
+                    <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                            Command="{Binding ChangeBookInventoryCodeCommand}"
+                            Content="Изменить код учета"
+                            HorizontalAlignment="Left"
+                            Margin="0,5,0,0"/>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+
+</Window>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="roman_paper_task_1/App.axaml" value="roman_paper_task_1/roman_paper_task_1.csproj" />
+        <entry key="roman_paper_task_1/Views/MainWindow.axaml" value="roman_paper_task_1/roman_paper_task_1.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
